@@ -67,7 +67,7 @@ The biggest limitation of this project seems to be access to public data.  Most 
 
 ## TODO:
 
-- [ ] Look into adding more information to manufacturers using public wikipedia data
+- [x] Look into adding more information to manufacturers using public wikipedia data
 - [ ] Determine source of where vehicle sales information can be obtained legally (ideally free)
 - [ ] Determine better data source for vehicle variations (current public data source is missing lots of 2024 car data)
 - [ ] Add automation scripts to docker image so publically available api data is periodically refreshed
