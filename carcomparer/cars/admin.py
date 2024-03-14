@@ -17,6 +17,12 @@ class CarManufacturerAdmin(admin.ModelAdmin):
     list_filter = ["manufacturer", "year", "vehicle_type"]
 
 
+@admin.register(Variation)
+class CarManufacturerAdmin(admin.ModelAdmin):
+    search_fields = ["model__manufacturer__name", "model__name", "name"]
+    list_filter = ["model__manufacturer", "model__year", "model__vehicle_type"]
+
+
 for model in app_config.get_models():
     try:
         admin.site.register(model)

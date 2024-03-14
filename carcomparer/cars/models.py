@@ -48,11 +48,6 @@ class Model(models.Model):
 
 # Eg. XLE, LX, EX, etc.
 class Variation(models.Model):
-    model = models.ForeignKey(
-        Model, related_name="variations", on_delete=models.CASCADE
-    )
-    name = models.CharField(max_length=100)  # e.g., "Sport", "LX", "GT"
-
     # FUEL_TYPE_CHOICES = [
     #     ("G", "Gasoline"),
     #     ("D", "Diesel"),
@@ -60,6 +55,11 @@ class Variation(models.Model):
     #     ("H", "Hybrid"),
     # ]
     # fuel_type = models.CharField(max_length=1, choices=FUEL_TYPE_CHOICES, default="G")
+
+    model = models.ForeignKey(
+        Model, related_name="variations", on_delete=models.CASCADE
+    )
+    name = models.CharField(max_length=100)  # e.g., "Sport", "LX", "GT"
 
     @property
     def full_name(self):
