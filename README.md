@@ -43,7 +43,7 @@ docker compose exec web python3 manage.py scrape_fueleconomy --scrape-type manuf
 The command scrapes all vehicle models for various manufacturers for the years 2023 - 2024 using nhtsa and populates the database with the results.
 ```sh
 docker compose exec web python3 manage.py scrape_nhtsa --scrape-type models --start-year 2023 --end-year 2024
-```sh
+```
 
 Populates Vehicle Types using nhtsa data
 ```sh
