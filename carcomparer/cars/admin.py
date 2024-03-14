@@ -14,13 +14,17 @@ class CarManufacturerAdmin(admin.ModelAdmin):
 @admin.register(Model)
 class CarManufacturerAdmin(admin.ModelAdmin):
     search_fields = ["manufacturer__name", "name"]
-    list_filter = ["manufacturer", "year", "vehicle_type"]
+    list_filter = ["manufacturer", "vehicle_type"]
 
 
 @admin.register(Variation)
 class CarManufacturerAdmin(admin.ModelAdmin):
-    search_fields = ["model__manufacturer__name", "model__name", "name"]
-    list_filter = ["model__manufacturer", "model__year", "model__vehicle_type"]
+    search_fields = [
+        "model_year__model__manufacturer__name",
+        "model_year__model__name",
+        "name",
+    ]
+    list_filter = ["model_year__model__manufacturer", "model_year__model__vehicle_type"]
 
 
 for model in app_config.get_models():

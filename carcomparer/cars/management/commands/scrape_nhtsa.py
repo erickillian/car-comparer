@@ -40,7 +40,6 @@ class ScrapeNHTSACommand(BaseAPICommand):  # Inherits from BaseAPICommand
                 car_model, created = Model.objects.get_or_create(
                     manufacturer=manufacturer,
                     name=model_name,
-                    year=year,
                 )
                 if created:
                     self.stdout.write(
@@ -52,6 +51,21 @@ class ScrapeNHTSACommand(BaseAPICommand):  # Inherits from BaseAPICommand
                     self.stdout.write(
                         self.style.WARNING(
                             f"Existing model: {manufacturer_name} {model_name}"
+                        )
+                    )
+                car_model_year, created = ModelYear.objects.get_or_create(
+                    model=car_model, year=year
+                )
+                if created:
+                    self.stdout.write(
+                        self.style.SUCCESS(
+                            f"Added model year: {year} {manufacturer_name} {model_name}"
+                        )
+                    )
+                else:
+                    self.stdout.write(
+                        self.style.WARNING(
+                            f"Existing model year: {year} {manufacturer_name} {model_name}"
                         )
                     )
 
@@ -91,6 +105,7 @@ class ScrapeNHTSACommand(BaseAPICommand):  # Inherits from BaseAPICommand
                 vehicle_type_name = item["VehicleTypeName"]
                 VehicleType.objects.get_or_create(name=vehicle_type_name)
                 vehicle_types.append(vehicle_type_name)
+
         return vehicle_types
 
     def update_vehicle_types(self, manufacturer, year, vehicle_type_name):
@@ -105,20 +120,20 @@ class ScrapeNHTSACommand(BaseAPICommand):  # Inherits from BaseAPICommand
                 model_name = item["Model_Name"]
                 # Try to update the vehicle_type for existing models.
                 updated = Model.objects.filter(
-                    manufacturer=manufacturer, name=model_name, year=year
+                    manufacturer=manufacturer, name=model_name
                 ).update(vehicle_type=vehicle_type)
                 if updated:
                     updated_models_count += 1
                     self.stdout.write(
                         self.style.SUCCESS(
-                            f"Updated vehicle type for: {year} {manufacturer.name} {model_name} to {vehicle_type_name}"
+                            f"Updated vehicle type for: {manufacturer.name} {model_name} to {vehicle_type_name}"
                         )
                     )
                 else:
                     # Optional: Log if a model was expected but not found.
                     self.stdout.write(
                         self.style.WARNING(
-                            f"No existing model found to update: {year} {manufacturer.name} {model_name}"
+                            f"No existing model found to update: {manufacturer.name} {model_name}"
                         )
                     )
             self.stdout.write(

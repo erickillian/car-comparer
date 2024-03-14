@@ -53,13 +53,12 @@ class ScrapeCarDataCommand(BaseAPICommand):
                 full_model_name = menuItem.find("text").text
                 # Split the full model name into all possible parts
                 parts = full_model_name.split(" ")
-
                 for i in range(len(parts), 0, -1):
                     # Attempt to match the model name starting from the longest possible match
                     potential_model_name = " ".join(parts[:i])
+
                     model_qs = Model.objects.filter(
                         Q(name__icontains=potential_model_name),
-                        year=year,
                         manufacturer__name__icontains=manufacturer_name,
                     )
 
@@ -69,18 +68,43 @@ class ScrapeCarDataCommand(BaseAPICommand):
                             " ".join(parts[i:]) if i < len(parts) else "Base"
                         )
                         model_instance = model_qs.first()
+
+                        model_instance_years = ModelYear.objects.filter(
+                            model=model_instance, year=year
+                        )
+                        if not model_instance_years.exists():
+                            model_instance_year = ModelYear.objects.create(
+                                model=model_instance, year=year
+                            )
+                            self.stdout.write(
+                                f"Added model year '{year}' to model '{model_instance}'."
+                            )
+                        else:
+                            model_instance_year = model_instance_years.first()
+
                         # Create a new variation for the model
-                        Variation.objects.get_or_create(
-                            model=model_instance, name=variation_name
+                        _, created = Variation.objects.get_or_create(
+                            model_year=model_instance_year, name=variation_name
                         )
-                        self.stdout.write(
-                            f"Added variation '{variation_name}' to model '{model_instance}'."
-                        )
+                        if created:
+                            self.stdout.write(
+                                self.style.SUCCESS(
+                                    f"Added variation '{variation_name}' to model '{model_instance_year}'."
+                                )
+                            )
+                        else:
+                            self.stdout.write(
+                                self.style.WARNING(
+                                    f"Existing variation '{variation_name}' for model '{model_instance_year}'."
+                                )
+                            )
                         break  # Break the loop once the matching model is found and variation created
                     else:
                         # If no matching model is found after checking all combinations
                         self.stdout.write(
-                            f"No matching model found for '{full_model_name}'."
+                            self.style.WARNING(
+                                f"No matching model found for '{full_model_name}'."
+                            )
                         )
         else:
             self.stdout.write(

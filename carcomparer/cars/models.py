@@ -12,9 +12,9 @@ class Manufacturer(models.Model):
         return self.name
 
 
-# Truck, Sedan, SUV, Motorcycle, etc.
+# Truck, Motorcycle, Passenger Car etc.
 class VehicleType(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
     description = models.TextField(blank=True, null=True)
 
     def __str__(self):
@@ -27,7 +27,6 @@ class Model(models.Model):
         Manufacturer, related_name="models", on_delete=models.CASCADE
     )
     name = models.CharField(max_length=100)
-    year = models.PositiveSmallIntegerField()
     vehicle_type = models.ForeignKey(
         VehicleType,
         related_name="models",
@@ -37,13 +36,30 @@ class Model(models.Model):
 
     @property
     def full_name(self):
-        return f"{self.year} {self.manufacturer.name} {self.name}"
+        return f"{self.manufacturer.name} {self.name}"
 
     def __str__(self):
         return self.full_name
 
     class Meta:
-        unique_together = ["manufacturer", "name", "year"]
+        unique_together = ["manufacturer", "name"]
+
+
+class ModelYear(models.Model):
+    model = models.ForeignKey(
+        Model, related_name="model_years", on_delete=models.CASCADE
+    )
+    year = models.PositiveSmallIntegerField()
+
+    @property
+    def full_name(self):
+        return f"{self.year} {self.model.full_name}"
+
+    def __str__(self):
+        return self.full_name
+
+    class Meta:
+        unique_together = ["model", "year"]
 
 
 # Eg. XLE, LX, EX, etc.
@@ -56,14 +72,14 @@ class Variation(models.Model):
     # ]
     # fuel_type = models.CharField(max_length=1, choices=FUEL_TYPE_CHOICES, default="G")
 
-    model = models.ForeignKey(
-        Model, related_name="variations", on_delete=models.CASCADE
+    model_year = models.ForeignKey(
+        ModelYear, related_name="variations", on_delete=models.CASCADE
     )
     name = models.CharField(max_length=100)  # e.g., "Sport", "LX", "GT"
 
     @property
     def full_name(self):
-        return f"{self.model.full_name} {self.name}"
+        return f"{self.model_year.full_name} {self.name}"
 
     def __str__(self):
         return self.full_name
