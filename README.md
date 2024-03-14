@@ -54,3 +54,18 @@ Populates vehicle variations using fueleconomy database results
 ```sh
 docker compose exec web python3 manage.py scrape_fueleconomy --scrape-type variations --start-year 2023 --end-year 2024
 ```
+
+## Current Limitations
+
+The biggest limitation of this project seems to be access to public data.  Most data seems to cost money to access apis, and most free datasources are not complete or recent.
+
+
+## TODO:
+
+- [ ] Look into adding more information to manufacturers using public wikipedia data
+- [ ] Determine source of where vehicle sales information can be obtained legally (ideally free)
+- [ ] Determine better data source for vehicle variations (current public data source is missing lots of 2024 car data)
+- [ ] Add automation scripts to docker image so publically available api data is periodically refreshed
+- [ ] Create API views for data so that a front end can be build around the data
+
+
