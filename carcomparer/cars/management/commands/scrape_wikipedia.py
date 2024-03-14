@@ -39,7 +39,7 @@ class ScrapeCarDataCommand(BaseAPICommand):  # Inherits from BaseAPICommand
             soup = BeautifulSoup(response.text, "html.parser")
             description = self.get_description(soup)
             infobox = soup.find("table", {"class": "infobox"})
-            year, country = None, None
+            year, country, website = None, None, None
             if infobox:
                 for row in infobox.find_all("tr"):
                     header = row.find("th")
@@ -51,6 +51,10 @@ class ScrapeCarDataCommand(BaseAPICommand):  # Inherits from BaseAPICommand
                             year = data_text.split(";")[0].strip()
                         elif "headquarters" in header_text:
                             country = data_text.split(",")[-1].strip()
+                        elif "website" in header_text:
+                            website_link = data.find("a", href=True)
+                            if website_link:
+                                website = website_link["href"]
 
                 # Try to get the specific manufacturer by name
                 manufacturer = Manufacturer.objects.get(name=manufacturer_name)
@@ -65,6 +69,9 @@ class ScrapeCarDataCommand(BaseAPICommand):  # Inherits from BaseAPICommand
                 manufacturer.founded_date = year if year else manufacturer.founded_date
                 manufacturer.description = (
                     description if description is not None else manufacturer.description
+                )
+                manufacturer.website = (
+                    website if website is not None else manufacturer.website
                 )
 
                 # Save the changes

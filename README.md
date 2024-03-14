@@ -31,8 +31,6 @@ docker compose exec web python3 manage.py makemigrations
 docker compose exec web python3 manage.py migrate
 ```
 
-
-
 ## Commands I am using to populate site with API data
 
 The command scrapes all manufacturers from the year 2023 - 2024 using fueleconomy and populates the database with the results.
@@ -62,7 +60,7 @@ docker compose exec web python3 manage.py scrape_fueleconomy --scrape-type varia
 
 ## Current Limitations
 
-The biggest limitation of this project seems to be access to public data.  Most data seems to cost money to access apis, and most free datasources are not complete or recent.
+The biggest limitation of this project seems to be access to public data.  Most data seems to cost money to access apis, and most free datasources are not complete or recent.  I also still need a source of car sales data or at least current car price data to be added to the site.
 
 
 ## TODO:
