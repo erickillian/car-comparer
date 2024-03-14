@@ -15,18 +15,18 @@ To start I am just working on the backend and trying to connect as many open sou
 ## Project Setup
 
 First install docker and docker compose on the system.  To test correct installation run 
-```
+```sh
 docker --version
 docker compose version
 ```
 
 To start project run
-```
+```sh
 docker compose up --build
 ```
 
 After project finishes building run
-```
+```sh
 docker compose exec web python3 manage.py makemigrations
 docker compose exec web python3 manage.py migrate
 ```
@@ -36,16 +36,21 @@ docker compose exec web python3 manage.py migrate
 ## Commands I am using to populate site with API data
 
 The command scrapes all manufacturers from the year 2023 - 2024 using fueleconomy and populates the database with the results.
-```
+```sh
 docker compose exec web python3 manage.py scrape_fueleconomy --scrape-type manufacturers --start-year 2023 --end-year 2024
 ```
 
 The command scrapes all vehicle models for various manufacturers for the years 2023 - 2024 using nhtsa and populates the database with the results.
-```
+```sh
 docker compose exec web python3 manage.py scrape_nhtsa --scrape-type models --start-year 2023 --end-year 2024
-```
+```sh
 
 Populates Vehicle Types using nhtsa data
-```
+```sh
 docker compose exec web python3 manage.py scrape_nhtsa --scrape-type vehicle_types --start-year 2023 --end-year 2024
+```
+
+Populates vehicle variations
+```sh
+docker compose exec web python3 manage.py scrape_fueleconomy --scrape-type variations --start-year 2023 --end-year 2024
 ```
