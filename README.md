@@ -50,7 +50,7 @@ Populates Vehicle Types using nhtsa data
 docker compose exec web python3 manage.py scrape_nhtsa --scrape-type vehicle_types --start-year 2023 --end-year 2024
 ```
 
-Populates vehicle variations
+Populates vehicle variations using fueleconomy database results
 ```sh
 docker compose exec web python3 manage.py scrape_fueleconomy --scrape-type variations --start-year 2023 --end-year 2024
 ```
