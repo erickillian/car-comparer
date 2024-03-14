@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:latest
+    volumes:
+      - ./data/postgresql:/var/lib/postgresql/data
+    restart: always
+    environment:
+      POSTGRES_DB: 'mydatabase'
+      POSTGRES_USER: 'user'
+      POSTGRES_PASSWORD: 'password'
+    command: postgres -c 'config_file=/var/lib/postgresql/data/postgresql.conf'
+  web:
+    build: .
+    # command: python manage.py runserver 0.0.0.0:80
+    volumes:
+      - .:/app
+    ports:
+      - "80:80"
+    depends_on:
+      - db
+    environment:
+      POSTGRES_HOST: db
+      POSTGRES_DB: 'mydatabase'
+      POSTGRES_USER: 'user'
+      POSTGRES_PASSWORD: 'password'
+    restart: always
+volumes:
+  postgresql:
