@@ -12,6 +12,26 @@ To start I am just working on the backend and trying to connect as many open sou
 - https://www.fueleconomy.gov/feg/ws/
 
 
+## Project Setup
+
+First install docker and docker compose on the system.  To test correct installation run 
+```
+docker --version
+docker compose version
+```
+
+To start project run
+```
+docker compose up --build
+```
+
+After project finishes building run
+```
+docker compose exec web python3 manage.py makemigrations
+docker compose exec web python3 manage.py migrate
+```
+
+
 
 ## Commands I am using to populate site with API data
 
