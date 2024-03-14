@@ -9,8 +9,8 @@ class BaseAPICommand(BaseCommand):
         parser.add_argument(
             "--start-year",
             type=int,
-            required=True,
             help="The start year for scraping data",
+            default=datetime.now().year,
         )
         parser.add_argument(
             "--end-year",

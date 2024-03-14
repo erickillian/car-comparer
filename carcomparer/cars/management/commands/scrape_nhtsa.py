@@ -4,7 +4,7 @@ import requests
 from carcomparer.cars.models import *
 
 
-class ScrapeNHTSACommand(BaseAPICommand):  # Inherits from BaseAPICommand
+class ScrapeCarDataCommand(BaseAPICommand):  # Inherits from BaseAPICommand
     help = "Scrapes NHTSA to populate the database with up-to-date model information"
 
     def scrape_models(self, year):
@@ -142,4 +142,4 @@ class ScrapeNHTSACommand(BaseAPICommand):  # Inherits from BaseAPICommand
 
 
 # This ensures Django finds this as the command to run
-Command = ScrapeNHTSACommand
+Command = ScrapeCarDataCommand
