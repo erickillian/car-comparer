@@ -87,9 +87,7 @@ class Variation(models.Model):
 
 
 class Price(models.Model):
-    car = models.OneToOneField(
-        Variation, related_name="prices", on_delete=models.CASCADE
-    )
+    car = models.ForeignKey(Variation, related_name="prices", on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=12, decimal_places=2)
     currency = models.CharField(max_length=3, default="USD")
     date = models.DateTimeField(auto_now=True)
